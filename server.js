@@ -3,7 +3,6 @@ const app = express();
 const authRoute = require("./routes/api/auth.route");
 
 const port = process.env.PORT || 3000;
-
 app.use(express.json({ extended: false }), (req, res, next) => {
   console.log("IN SERVER.JS RUNNING BODYPARSER MIDDLEWARE ");
   next();
