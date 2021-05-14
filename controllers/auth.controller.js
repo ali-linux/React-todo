@@ -1,14 +1,30 @@
-const express = require("express");
 const { db } = require("../config/db");
-const knex = require("knex");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
+//GET USER INFO
+
+const getUserInfo = async (req, res, next) => {
+  try {
+    const result = await db
+      .from("users")
+      .select("*")
+      .where("email", "=", req.user.email)
+      .first();
+    res.json(result);
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+//LOGIN
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const result = await db
       .from("users")
-      .select("email", "password")
+      .select("*")
       .where("email", "=", email)
       .first();
     if (!result)
@@ -22,14 +38,30 @@ const login = async (req, res, next) => {
     const isMatch = await bcrypt.compare(password, result.password);
     if (!isMatch) {
       return res.status(400).json({ errors: [{ msg: "INVALID CREDENTIALS" }] });
-    } else {
-      res.json({ result, msg: "they match " });
     }
+    const payload = {
+      user: {
+        id: result.id,
+        name: result.name,
+        email: result.email,
+      },
+    };
+    jwt.sign(
+      payload,
+      config.get("jwtToken"),
+      { expiresIn: 36000 },
+      (err, token) => {
+        if (err) throw err;
+        res.json(token);
+      }
+    );
+    // res.json({ result, msg: "they match " });
   } catch (err) {
     res.send(err.message);
   }
 };
 
+// REGISTER
 const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
@@ -52,4 +84,5 @@ const register = async (req, res, next) => {
 module.exports = {
   login,
   register,
+  getUserInfo,
 };
