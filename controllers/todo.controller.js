@@ -37,7 +37,46 @@ const addTodo = async (req, res) => {
   }
 };
 
+const deleteTodo = async (req, res) => {
+  const id = req.body.id;
+  const user_id = req.user.id;
+  try {
+    const result = await db("todo")
+      .where({
+        id,
+        user_id,
+      })
+      .del();
+    res.json(result);
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+const updateTodo = async (req, res) => {
+  try {
+    const { id, title, description } = req.body;
+    const user_id = req.user.id;
+    const result = await db("todo")
+      .where({
+        id,
+        user_id,
+      })
+      .update({
+        title,
+        description,
+      });
+    if (result === 0) {
+      return res.status(401).send("UNAUTHORIZED!");
+    }
+    res.json({ msg: "updated successfully" });
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
 module.exports = {
   getTodos,
   addTodo,
+  deleteTodo,
+  updateTodo,
 };

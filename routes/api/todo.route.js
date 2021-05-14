@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const todoController = require("../../controllers/todo.controller");
-// const todoValidator = require("../../validators/todoValidator");
+const todoValidator = require("../../validators/todoValidator");
 const auth = require("../../middlewares/auth.middleware");
 
 /*
@@ -16,6 +16,30 @@ router.get("/", auth, todoController.getTodos);
   @dec adds todo
   @access protected
 */
+router.post(
+  "/add",
+  todoValidator.addTodValidator,
+  auth,
+  todoController.addTodo
+);
 
-router.post("/add", auth, todoController.addTodo);
+/*
+@route api/todo/delete
+@dec deletes todo
+@access protected
+*/
+router.post("/delete", auth, todoController.deleteTodo);
+
+/*
+@route api/todo/update
+@dec update todo
+@access protected
+*/
+router.post(
+  "/update",
+  auth,
+  todoValidator.updateTodoValidator,
+  todoController.updateTodo
+);
+
 module.exports = router;
