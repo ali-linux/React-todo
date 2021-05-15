@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "migrate": "npx knex migrate:latest --knexfile ./db/knexfile.js",
-    "start": "nodemon server"
+    "start": "nodemon server",
+    "frontend": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run frontend\""
   },
   "author": "ali srwsht",
   "license": "ISC",
