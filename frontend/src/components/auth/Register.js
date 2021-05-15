@@ -1,11 +1,12 @@
-import React, { useState, Fragment } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./auth.css";
 import { setAlert } from "../../redux/actions/alert.action";
 import { register } from "../../redux/actions/auth.action";
 
 const Register = () => {
+  const history = useHistory();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,8 +14,12 @@ const Register = () => {
     password2: "",
   });
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.loginReducer);
   const { name, email, password, password2 } = formData;
 
+  // useEffect(() => {
+
+  // }, [isAuthenticated, history]);
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -24,16 +29,14 @@ const Register = () => {
       dispatch(setAlert("Passwords do not match", "danger"));
       console.log("passwords do not match");
     } else {
-      dispatch(register({ name, email, password }));
-      console.log("registered!");
+      const result = await dispatch(register({ name, email, password }));
+      if (result) history.push("/login");
     }
   };
-
-  // if (isAuthenticated) {
-  //   return <Redirect to="/dashboard" />;
-  // }
-
-  return (
+  if (isAuthenticated) history.push("/");
+  return isAuthenticated ? (
+    <div>hello</div>
+  ) : (
     <div id="form">
       <h1 className="auth-heading">Register</h1>
       <p className="lead">
@@ -47,6 +50,7 @@ const Register = () => {
             name="name"
             value={name}
             onChange={onChange}
+            required
           />
         </div>
         <div className="form-group">
@@ -56,6 +60,7 @@ const Register = () => {
             name="email"
             value={email}
             onChange={onChange}
+            required
           />
         </div>
         <div className="form-group">
@@ -65,6 +70,8 @@ const Register = () => {
             name="password"
             value={password}
             onChange={onChange}
+            required
+            minLength="6"
           />
         </div>
         <div className="form-group">
@@ -74,6 +81,7 @@ const Register = () => {
             name="password2"
             value={password2}
             onChange={onChange}
+            minLength="6"
           />
         </div>
         <input type="submit" className="submit-button" value="Register" />

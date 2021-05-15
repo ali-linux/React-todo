@@ -1,7 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import "./navbar.css";
+
 const Navbar = () => {
+  const { userInfo, isAuthenticated } = useSelector(
+    (state) => state.loginReducer
+  );
   return (
     <div className="navbar">
       <div className="container">
@@ -10,10 +15,18 @@ const Navbar = () => {
         </div>
         <div className="leftSection">
           <div className="login">
-            <Link to="/login">login</Link>
+            {isAuthenticated ? (
+              <h3>welcome {userInfo.name}</h3>
+            ) : (
+              <Link to="/login">login</Link>
+            )}
           </div>
           <div className="Register">
-            <Link to="/register">Register</Link>
+            {isAuthenticated ? (
+              <h3>logout</h3>
+            ) : (
+              <Link to="/register">Register</Link>
+            )}
           </div>
         </div>
       </div>

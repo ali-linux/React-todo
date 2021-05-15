@@ -46,13 +46,17 @@ const login = async (req, res, next) => {
         email: result.email,
       },
     };
+    const userInfo = payload.user;
     jwt.sign(
       payload,
       config.get("jwtToken"),
       { expiresIn: 36000 },
       (err, token) => {
         if (err) throw err;
-        res.json(token);
+        res.json({
+          token,
+          userInfo,
+        });
       }
     );
     // res.json({ result, msg: "they match " });
@@ -65,6 +69,19 @@ const login = async (req, res, next) => {
 const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
+    const userExist = await db
+      .select("email")
+      .from("users")
+      .where({ email })
+      .first();
+    if (userExist)
+      return res.status(400).json({
+        errors: [
+          {
+            msg: "user already exist with that email address",
+          },
+        ],
+      });
     const salt = await bcrypt.genSalt(10);
     const encryptedPassword = await bcrypt.hash(password, salt);
     const result = await db("users").insert({

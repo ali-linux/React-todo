@@ -1,6 +1,10 @@
 import axios from "axios";
 import { setAlert } from "../actions/alert.action";
-import { REGISTER_FAIL, REGISTER_SUCCESS } from "../constants/auth.constants";
+import {
+  LOGIN_SUCCESS,
+  REGISTER_FAIL,
+  REGISTER_SUCCESS,
+} from "../constants/auth.constants";
 
 export const register =
   ({ name, email, password }) =>
@@ -13,19 +17,57 @@ export const register =
 
     const body = JSON.stringify({ name, email, password });
     try {
-      const res = await axios.post("api/auth/register", body, config);
+      await axios.post("api/auth/register", body, config);
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: res.data,
       });
+      dispatch(setAlert("successfully registered", "success"));
+      return true;
     } catch (err) {
       const errors = err.response.data.errors;
-      if (errors)
+      if (errors) {
         errors.forEach((err) => {
           dispatch(setAlert(err.msg, "danger"));
         });
+      } else {
+        dispatch(setAlert("SERVER ERROR", "danger"));
+      }
       dispatch({
         type: REGISTER_FAIL,
       });
+      return false;
+    }
+  };
+
+export const login =
+  ({ email, password }) =>
+  async (dispatch) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const body = JSON.stringify({ email, password });
+
+      const { data } = await axios.post("api/auth/login", body, config);
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: data,
+      });
+      console.log(data);
+    } catch (err) {
+      const errors = err.response.data.errors;
+      if (errors) {
+        errors.forEach((err) => {
+          dispatch(setAlert(err.msg, "danger"));
+        });
+      } else {
+        dispatch(setAlert("SERVER ERROR", "danger"));
+      }
+      dispatch({
+        type: REGISTER_FAIL,
+      });
+      return false;
     }
   };
