@@ -13,8 +13,9 @@ const Login = () => {
   const history = useHistory();
   const { email, password } = formData;
   const { isAuthenticated } = useSelector((state) => state.loginReducer);
-  const onChange = (e) =>
+  const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();

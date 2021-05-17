@@ -21,16 +21,24 @@ const getTodos = async (req, res, next) => {
 
 const addTodo = async (req, res) => {
   try {
-    const { title, description, id } = req.body;
+    const { title, description } = req.body;
     const user_id = req.user.id;
-    const result = await db("todo").insert({
-      title,
-      description,
-      user_id,
-    });
+    const result = await db("todo")
+      .insert({
+        title,
+        description,
+        user_id,
+      })
+      .returning("*");
+    const id = result[0];
     res.json({
       msg: "successfully added",
-      result,
+      todo: {
+        id,
+        title,
+        description,
+        user_id,
+      },
     });
   } catch (err) {
     res.send(err.message);

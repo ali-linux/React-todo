@@ -1,3 +1,4 @@
+import "antd/dist/antd.css";
 import "./App.css";
 import React, { Fragment } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";

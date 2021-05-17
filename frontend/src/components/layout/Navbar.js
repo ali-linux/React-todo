@@ -2,11 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./navbar.css";
-
+import { logout } from "../../redux/actions/auth.action";
 const Navbar = () => {
   const { userInfo, isAuthenticated } = useSelector(
     (state) => state.loginReducer
   );
+  const dispatch = useDispatch();
+  const logoutHandler = () => {
+    localStorage.removeItem("clientInfo");
+    dispatch(logout());
+  };
   return (
     <div className="navbar">
       <div className="container">
@@ -23,7 +28,9 @@ const Navbar = () => {
           </div>
           <div className="Register">
             {isAuthenticated ? (
-              <h3>logout</h3>
+              <h3 style={{ cursor: "pointer" }} onClick={logoutHandler}>
+                logout
+              </h3>
             ) : (
               <Link to="/register">Register</Link>
             )}

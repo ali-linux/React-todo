@@ -3,6 +3,7 @@ import {
   LOGIN_SUCCESS,
   REGISTER_FAIL,
   REGISTER_SUCCESS,
+  LOGOUT,
 } from "../constants/auth.constants";
 
 const registerState = {
@@ -56,6 +57,14 @@ export const loginReducer = (state = loginState, action) => {
       return {
         ...state,
         loading: false,
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: true,
+        userInfo: null,
       };
     default:
       return state;

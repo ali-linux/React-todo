@@ -2,10 +2,12 @@ import axios from "axios";
 import { setAlert } from "../actions/alert.action";
 import {
   LOGIN_SUCCESS,
+  LOGOUT,
   REGISTER_FAIL,
   REGISTER_SUCCESS,
 } from "../constants/auth.constants";
 
+//REGISTER
 export const register =
   ({ name, email, password }) =>
   async (dispatch) => {
@@ -30,7 +32,7 @@ export const register =
           dispatch(setAlert(err.msg, "danger"));
         });
       } else {
-        dispatch(setAlert("SERVER ERROR", "danger"));
+        dispatch(setAlert(err.response.data.msg, "danger"));
       }
       dispatch({
         type: REGISTER_FAIL,
@@ -71,3 +73,12 @@ export const login =
       return false;
     }
   };
+export const logout = () => (dispatch) => {
+  try {
+    dispatch({
+      type: LOGOUT,
+    });
+  } catch (err) {
+    dispatch(setAlert(err.response.message), "warning");
+  }
+};

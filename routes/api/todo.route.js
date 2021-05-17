@@ -18,8 +18,8 @@ router.get("/", auth, todoController.getTodos);
 */
 router.post(
   "/add",
-  todoValidator.addTodValidator,
   auth,
+  todoValidator.addTodValidator,
   todoController.addTodo
 );
 
