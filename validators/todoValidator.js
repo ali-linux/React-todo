@@ -13,7 +13,7 @@ const addTodValidator = [
 ];
 
 const updateTodoValidator = [
-  check("id", "id is required").not().isEmpty().isNumeric(),
+  check("_id", "id is required").not().isEmpty().isString(),
   check("title", "title is required").not().isEmpty().escape(),
   check("description").escape(),
   (req, res, next) => {

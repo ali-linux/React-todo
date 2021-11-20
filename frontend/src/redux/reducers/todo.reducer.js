@@ -30,14 +30,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        todoList: state.todoList.filter((todo) => todo.id !== action.payload),
+        todoList: state.todoList.filter((todo) => todo._id !== action.payload),
       };
     case PUT_TODO_SUCCESS:
       return {
         ...state,
         loading: false,
         todoList: state.todoList.map((todo) => {
-          if (todo.id === action.payload.id) {
+          if (todo._id === action.payload._id) {
             return action.payload;
           }
           return todo;

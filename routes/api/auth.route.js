@@ -18,18 +18,26 @@ const createAccountLimiter = limiter({
   @route api/auth/login
   @access public
 */
-router.post("/login", authController.login);
+// router.post("/login", authController.login);
+router.post("/login", authController.loginMongo);
 
-router.get("/user", auth, authController.getUserInfo);
+// router.get("/user", auth, authController.getUserInfo);
+router.get("/user", auth, authController.getAuth);
 /*
   @route api/auth/register
   @access public
 */
+// router.post(
+//   "/register",
+//   createAccountLimiter,
+//   authValidator.registerValidator,
+//   authController.register
+// );
 router.post(
   "/register",
   createAccountLimiter,
   authValidator.registerValidator,
-  authController.register
+  authController.registerMongo
 );
 
 module.exports = router;

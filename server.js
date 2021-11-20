@@ -1,14 +1,14 @@
 const express = require("express");
 const limiter = require("express-rate-limit");
 const helmet = require("helmet");
-// const xss = require("xss");
 const compression = require("compression");
 const checkDb = require("./utils/checkDbConnection");
 const authRoute = require("./routes/api/auth.route");
 const todoRoute = require("./routes/api/todo.route");
+const db = require('./mongodb/db')
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const rateLimit = limiter({
   windowMs: 30 * 60 * 1000, //30 min
   max: 120,
@@ -18,13 +18,14 @@ const rateLimit = limiter({
   },
 });
 
+db.on('error', console.error.bind(console, 'MongoDB Not Connected:'))
 app.use(rateLimit);
 
 // secure HTTP headers
 app.use(helmet());
 
 //CHECK db if Connected
-app.use(checkDb);
+// app.use(checkDb);
 
 app.use(express.json({ extended: false, limit: "40kb" }));
 app.use(

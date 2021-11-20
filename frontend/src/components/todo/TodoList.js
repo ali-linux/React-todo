@@ -9,7 +9,7 @@ import { deleteTodo } from "../../redux/actions/todo.action";
 import { setAlert } from "../../redux/actions/alert.action";
 const TodoList = () => {
   const [addTodo, setAddTodo] = useState({
-    id: 0,
+    _id: 0,
     title: "",
     description: "",
   });
@@ -20,22 +20,18 @@ const TodoList = () => {
   }, [dispatch]);
   const { TextArea } = Input;
   const { Panel } = Collapse;
-  const editHandler = () => {
-    console.log("editModal");
-  };
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => {
     setIsModalVisible(true);
   };
-  const { id, title, description } = addTodo;
+  const { _id, title, description } = addTodo;
 
   const handleOk = () => {
     if (title.length === 0) {
-      console.log({ title, description });
       dispatch(setAlert("title should not be empty", "danger"));
     } else {
       setIsModalVisible(false);
-      dispatch(updateTodo(id, title, description));
+      dispatch(updateTodo(_id, title, description));
     }
   };
 
@@ -47,7 +43,7 @@ const TodoList = () => {
   const onChange = (e) => {
     setAddTodo({ ...addTodo, [e.target.name]: e.target.value });
   };
-  const editBtn = (id, title, description) => (
+  const editBtn = (_id, title, description) => (
     <Fragment>
       <EditOutlined
         className="todo-icon"
@@ -55,8 +51,7 @@ const TodoList = () => {
         // onClick={deleteHandler()}
         onClick={(e) => {
           e.stopPropagation();
-          setAddTodo({ id, title, description });
-          console.log(id, title, description);
+          setAddTodo({ _id, title, description });
           showModal();
         }}
       />
@@ -67,7 +62,7 @@ const TodoList = () => {
         onConfirm={(e) => {
           e.stopPropagation();
 
-          dispatch(deleteTodo(id));
+          dispatch(deleteTodo(_id));
         }}
         onCancel={(e) => {
           e.stopPropagation();
@@ -128,8 +123,8 @@ const TodoList = () => {
             <Fragment>
               <Panel
                 header={todo.title}
-                key={todo.id}
-                extra={editBtn(todo.id, todo.title, todo.description)}
+                key={todo._id}
+                extra={editBtn(todo._id, todo.title, todo.description)}
                 className="site-collapse-custom-panel"
               >
                 <p>{todo.description}</p>

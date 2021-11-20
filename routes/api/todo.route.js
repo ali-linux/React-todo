@@ -9,7 +9,8 @@ const auth = require("../../middlewares/auth.middleware");
   @dec retrives list of todos
   @access protected
 */
-router.get("/", auth, todoController.getTodos);
+// router.get("/", auth, todoController.getTodos);
+router.get("/", auth, todoController.getTodosMongo);
 
 /*
   @route api/todo/add
@@ -20,7 +21,7 @@ router.post(
   "/add",
   auth,
   todoValidator.addTodValidator,
-  todoController.addTodo
+  todoController.addTodoMongo
 );
 
 /*
@@ -28,18 +29,27 @@ router.post(
 @dec deletes todo
 @access protected
 */
-router.post("/delete", auth, todoController.deleteTodo);
+// router.post("/delete", auth, todoController.deleteTodo);
+router.post("/delete", auth, todoController.deleteTodoMongo);
 
 /*
 @route api/todo/update
 @dec update todo
 @access protected
 */
+// router.post(
+//   "/update",
+//   auth,
+//   todoValidator.updateTodoValidator,
+//   todoController.updateTodo
+// );
+
 router.post(
   "/update",
   auth,
   todoValidator.updateTodoValidator,
-  todoController.updateTodo
+  todoController.updateTodoMongo
+
 );
 
 module.exports = router;

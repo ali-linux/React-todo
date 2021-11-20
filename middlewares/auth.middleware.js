@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 
 module.exports = (req, res, next) => {
-  console.log("inside AUTH middleware FOR JWT AUTHENTICATION");
   // GET THE TOKEN FROM THE HEADER
   const token = req.header("x-auth-token");
   // CHECK IF NO TOKEN

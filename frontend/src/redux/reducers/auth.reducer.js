@@ -29,23 +29,22 @@ export const registerReducer = (state = registerState, action) => {
 const clientInfo = JSON.parse(localStorage.getItem("clientInfo"));
 const loginState = clientInfo
   ? {
-      token: clientInfo.token,
-      isAuthenticated: true,
-      loading: false,
-      userInfo: clientInfo.userInfo,
-    }
+    token: clientInfo.token,
+    isAuthenticated: true,
+    loading: false,
+    userInfo: clientInfo.userInfo,
+  }
   : {
-      token: null,
-      isAuthenticated: false,
-      loading: true,
-      userInfo: null,
-    };
+    token: null,
+    isAuthenticated: false,
+    loading: true,
+    userInfo: null,
+  };
 
 export const loginReducer = (state = loginState, action) => {
   switch (action.type) {
     case LOGIN_SUCCESS:
       localStorage.setItem("clientInfo", JSON.stringify(action.payload));
-      console.log(action.payload);
       return {
         ...state,
         token: action.payload.token,

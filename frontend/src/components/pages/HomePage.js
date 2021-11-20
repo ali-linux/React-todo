@@ -31,10 +31,8 @@ const HomePage = () => {
   const handleOk = () => {
     if (title.length === 0) {
       dispatch(setAlert("title is required", "danger"));
-      console.log({ title, description });
     } else {
       setIsModalVisible(false);
-      console.log(userInfo.id);
       dispatch(addTodoFunc(title, description, userInfo.id));
     }
   };

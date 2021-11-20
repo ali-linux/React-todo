@@ -27,7 +27,7 @@ export const getTodos = () => async (dispatch) => {
     dispatch({
       type: GET_TODO_FAIL,
     });
-    dispatch(setAlert(err.response.status), "danger");
+    dispatch(setAlert(err?.response?.status), "danger");
   }
 };
 
@@ -42,7 +42,6 @@ export const addTodoFunc =
         },
       };
       const body = JSON.stringify({ title, description, user_id });
-      console.log(body);
       const { data } = await axios.post("/api/todo/add", body, config);
       dispatch({
         type: POST_TODO_SUCCESS,
@@ -53,11 +52,11 @@ export const addTodoFunc =
         type: POST_TODO_FAIL,
       });
       console.log(err);
-      dispatch(setAlert(err.response.data), "danger");
+      dispatch(setAlert(err?.response?.data), "danger");
     }
   };
 
-export const deleteTodo = (id) => async (dispatch) => {
+export const deleteTodo = (_id) => async (dispatch) => {
   try {
     const token = JSON.parse(localStorage.getItem("clientInfo")).token;
     const config = {
@@ -66,19 +65,18 @@ export const deleteTodo = (id) => async (dispatch) => {
         "x-auth-token": token,
       },
     };
-    await axios.post("/api/todo/delete", { id: id }, config);
+    await axios.post("/api/todo/delete", { _id }, config);
     dispatch({
       type: DELETE_TODO_SUCCESS,
-      payload: id,
+      payload: _id,
     });
     dispatch(setAlert("Todo deleted successfully", "success"));
   } catch (err) {
-    console.log(err.response.data);
     dispatch(setAlert("ali", "danger"));
   }
 };
 
-export const updateTodo = (id, title, description) => async (dispatch) => {
+export const updateTodo = (_id, title, description) => async (dispatch) => {
   try {
     const token = JSON.parse(localStorage.getItem("clientInfo")).token;
     const config = {
@@ -87,12 +85,12 @@ export const updateTodo = (id, title, description) => async (dispatch) => {
         "x-auth-token": token,
       },
     };
-    const body = JSON.stringify({ id, title, description });
+    const body = JSON.stringify({ _id, title, description });
     const { data } = await axios.post("/api/todo/update", body, config);
     dispatch({
       type: PUT_TODO_SUCCESS,
       payload: {
-        id,
+        _id,
         title,
         description,
       },
